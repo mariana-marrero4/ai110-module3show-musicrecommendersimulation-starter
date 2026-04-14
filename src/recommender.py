@@ -117,18 +117,21 @@ def load_songs(csv_path: str) -> List[Dict]:
     print(f"Loaded songs: {len(songs)}")
     return songs
 
-def score_song(song: Dict, user_prefs: Dict) -> float:
-    """Calculate recommendation score: genre 1.5, mood 1.0, energy 1.5+bonus, valence 0.75, acousticness weighted."""
+def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
+    """Scores a single song and returns (score, reasons) tuple."""
     score = 0.0
+    reasons = []
     
     # LEVEL 1: Categorical matches (strong signals)
-    # Genre match: +1.5 points (reduced from 2.0)
+    # Genre match: +1.5 points
     if song['genre'].lower() == user_prefs['favorite_genre'].lower():
         score += 1.5
+        reasons.append("Genre match")
     
     # Mood match: +1.0 point
     if song['mood'].lower() == user_prefs['favorite_mood'].lower():
         score += 1.0
+        reasons.append("Mood match")
     
     # LEVEL 2: Weighted similarity (numeric - gradual)
     # Energy: Very important for both profiles
@@ -139,6 +142,9 @@ def score_song(song: Dict, user_prefs: Dict) -> float:
     # Energy precision bonus: +0.5 if energy_diff < 0.05 (NEW)
     if energy_diff < 0.05:
         score += 0.5
+        reasons.append(f"Perfect energy ({song['energy']:.2f})")
+    elif energy_diff < 0.15:
+        reasons.append(f"Good energy match ({song['energy']:.2f})")
     
     # Valence: Moderately important
     valence_diff = abs(song['valence'] - user_prefs['target_valence'])
@@ -151,48 +157,18 @@ def score_song(song: Dict, user_prefs: Dict) -> float:
     acoustic_score = acoustic_weight * (1.0 - acoustic_diff)
     score += acoustic_score
     
-    return score
-
-
-def get_explanation(song: Dict, user_prefs: Dict) -> str:
-    """Generate human-readable explanation of why a song was recommended."""
-    reasons = []
-    
-    # Check for categorical matches
-    if song['genre'].lower() == user_prefs['favorite_genre'].lower():
-        reasons.append("Genre match")
-    
-    if song['mood'].lower() == user_prefs['favorite_mood'].lower():
-        reasons.append("Mood match")
-    
-    # Check energy similarity
-    energy_diff = abs(song['energy'] - user_prefs['target_energy'])
-    if energy_diff < 0.05:
-        reasons.append(f"Perfect energy ({song['energy']:.2f})")
-    elif energy_diff < 0.15:
-        reasons.append(f"Good energy match ({song['energy']:.2f})")
-    
-    # Check acousticness
-    acoustic_diff = abs(song['acousticness'] - user_prefs['target_acousticness'])
+    # Check acousticness reason
     if acoustic_diff < 0.1:
         if song['acousticness'] > 0.7:
             reasons.append("High acousticness")
         elif song['acousticness'] < 0.2:
             reasons.append("Low acousticness (electric)")
     
-    # Build explanation
-    explanation = " + ".join(reasons) if reasons else "Good overall match"
-    return explanation
-
-
-def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
-    """
-    Scores a single song against user preferences.
-    Required by recommend_songs() and src/main.py
-    """
-    # TODO: Implement scoring logic using your Algorithm Recipe from Phase 2.
-    # Expected return format: (score, reasons)
-    return []
+    # Add default reason if no reasons found
+    if not reasons:
+        reasons.append("Good overall match")
+    
+    return score, reasons
 
 def recommend_songs(user_prefs: Dict, songs: List[Dict], k: int = 5) -> List[Tuple[Dict, float, str]]:
     """Return top-k song recommendations scored and ranked by user preference match."""
@@ -202,8 +178,8 @@ def recommend_songs(user_prefs: Dict, songs: List[Dict], k: int = 5) -> List[Tup
     # Score all songs
     scored_songs = []
     for song in songs:
-        score = score_song(song, user_prefs)
-        explanation = get_explanation(song, user_prefs)
+        score, reasons = score_song(user_prefs, song)  # New signature
+        explanation = " + ".join(reasons)
         scored_songs.append((song, score, explanation))
     
     # Sort by score (descending)
