@@ -23,9 +23,20 @@ Some prompts to answer:
 
 - What features does each `Song` use in your system
   - For example: genre, mood, energy, tempo
+
+  Each song in the catalog stores numerical features (energy, valence, acousticness, danceability, tempo_bpm on a 0–1 scale), categorical features (genre: pop, rock, jazz, lofi, ambient, synthwave, indie pop; mood: happy, chill, intense, relaxed, focused, moody), and metadata (title, artist).
+
 - What information does your `UserProfile` store
+
+  The user profile stores the preferred numerical features (energy, valence, acousticness—the core "vibe" dimensions), the preferred categorical features (genre and mood as filter constraints), and an optional flexibility parameter for how strictly to enforce genre matching.
+
 - How does your `Recommender` compute a score for each song
+
+  The recommender measures the distance between the user's preferred features and each song's features (weighted by importance), it applies categorical filters (penalizing non-matching genres rather than ruling them out), and returns a score between 0 and 1. For example, if a user wants high energy (0.8) and high valence (0.75), a song with energy 0.78 and valence 0.72 scores higher than one with energy 0.95 and valence 0.5 (too intense, less happy).
+
 - How do you choose which songs to recommend
+
+  All the songs are ranked by their computed score (highest first) and the return is the top-k recommendations, where k is typically 5 or 10.
 
 You can include a simple diagram or bullet list if helpful.
 
