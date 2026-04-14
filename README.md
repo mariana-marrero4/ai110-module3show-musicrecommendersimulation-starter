@@ -42,6 +42,35 @@ You can include a simple diagram or bullet list if helpful.
 
 ---
 
+### Finalized Algorithm Recipe
+
+```
+SCORE = Categorical Matches + Numerical Similarities
+
+Categorical:
+  + 1.5 if genre matches        [reduced from 2.0 to combat filter bubble]
+  + 1.0 if mood matches
+
+Numerical:
+  + 1.5 × (1 - |energy_diff|)
+  + 0.5 bonus if energy_diff < 0.05    [NEW: reward precise energy match]
+  + 0.75 × (1 - |valence_diff|)
+  + acousticness_weight × (1 - |acousticness_diff|)
+    [Lofi: 1.0 instead of 1.5 to reduce acoustic-only bias]
+    [Rock: 0.5]
+
+MAX SCORE: ~6.75
+```
+
+Categorical matches are important but reduced to allow numerical features to compete. Energy precision bonus rewards close matches. Acousticness weight lowered for Lofi to allow electronic-chill music to score well. Serendipity emerges from gradual scoring + future diversity mode.
+
+### Potential Biases
+
+- **Ignores lyrics**: A sad vs. happy lofi track look identical numerically. (Requires lyric analysis—out of scope)
+- **Tiny dataset**: Only 19 songs, not representative of real diversity.
+
+---
+
 ## Getting Started
 
 ### Setup
