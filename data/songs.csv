@@ -47,3 +47,5 @@ id,title,artist,genre,mood,energy,tempo_bpm,valence,danceability,acousticness
 46,Whisper Soft,Intimate Jazz,jazz,peaceful,0.33,85,0.69,0.45,0.86
 47,Thunder Road,Rock Legends,rock,intense,0.89,150,0.45,0.69,0.12
 48,Peaceful Garden,Nature Sounds,ambient,peaceful,0.20,55,0.64,0.35,0.94
+49,Neon Nights,Digital Vibes,synthwave,energetic,0.84,132,0.73,0.80,0.15
+50,Soft Wonder,Dreamy Indie,indie pop,chill,0.44,98,0.70,0.60,0.72
