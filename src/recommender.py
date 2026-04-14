@@ -88,10 +88,7 @@ class Recommender:
         return "Explanation placeholder"
 
 def load_songs(csv_path: str) -> List[Dict]:
-    """
-    Loads songs from a CSV file.
-    Returns list of song dictionaries with all attributes.
-    """
+    """Loads songs from CSV file and returns list of song dictionaries."""
     songs = []
     try:
         with open(csv_path, 'r', encoding='utf-8') as f:
@@ -117,23 +114,11 @@ def load_songs(csv_path: str) -> List[Dict]:
         print(f"Error loading songs: {e}")
         return []
     
+    print(f"Loaded songs: {len(songs)}")
     return songs
 
 def score_song(song: Dict, user_prefs: Dict) -> float:
-    """
-    Calculates a recommendation score for a song based on user preferences.
-    
-    Updated Algorithm (v2):
-    - Genre match: +1.5 (reduced from 2.0 to combat filter bubble)
-    - Mood match: +1.0
-    - Energy similarity: +1.5 × (1 - diff)
-    - Energy precision bonus: +0.5 if diff < 0.05 (NEW)
-    - Valence similarity: +0.75 × (1 - diff)
-    - Acousticness similarity: +weight × (1 - diff)
-      [Lofi: 1.0, Rock: 0.5]
-    
-    MAX SCORE: ~6.75
-    """
+    """Calculate recommendation score: genre 1.5, mood 1.0, energy 1.5+bonus, valence 0.75, acousticness weighted."""
     score = 0.0
     
     # LEVEL 1: Categorical matches (strong signals)
@@ -170,9 +155,7 @@ def score_song(song: Dict, user_prefs: Dict) -> float:
 
 
 def get_explanation(song: Dict, user_prefs: Dict) -> str:
-    """
-    Generates a human-readable explanation of why a song was recommended.
-    """
+    """Generate human-readable explanation of why a song was recommended."""
     reasons = []
     
     # Check for categorical matches
@@ -203,17 +186,7 @@ def get_explanation(song: Dict, user_prefs: Dict) -> str:
 
 
 def recommend_songs(user_prefs: Dict, songs: List[Dict], k: int = 5) -> List[Tuple[Dict, float, str]]:
-    """
-    Recommends top-k songs based on user preferences.
-    
-    Args:
-        user_prefs: User preference dictionary
-        songs: List of song dictionaries
-        k: Number of recommendations to return (default 5)
-    
-    Returns:
-        List of tuples: (song_dict, score, explanation_string)
-    """
+    """Return top-k song recommendations scored and ranked by user preference match."""
     if not songs:
         return []
     

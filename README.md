@@ -71,6 +71,20 @@ Categorical matches are important but reduced to allow numerical features to com
 
 ---
 
+## Example Output
+
+Below are actual terminal outputs from running the Music Recommender Simulation with both user profiles.
+
+### Profile 1: Chill Lofi Lover
+
+![Terminal Output 1](pics/terminalOutput_1.png)
+
+### Profile 2: Intense Rock Fan
+
+![Terminal Output 2](pics/terminalOutput_2.png)
+
+---
+
 ## Getting Started
 
 ### Setup

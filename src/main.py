@@ -18,11 +18,11 @@ from recommender import (
 
 
 def main() -> None:
-    songs = load_songs("data/songs.csv")
-    
     print("=" * 70)
     print("[MUSIC RECOMMENDER SIMULATION]")
     print("=" * 70)
+    
+    songs = load_songs("data/songs.csv")
     
     # =======================================================================
     # PROFILE 1: Chill Lofi Lover
