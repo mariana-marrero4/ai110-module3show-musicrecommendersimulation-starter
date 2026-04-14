@@ -31,3 +31,19 @@ id,title,artist,genre,mood,energy,tempo_bpm,valence,danceability,acousticness
 30,Chill Wave,Lofi Studio,lofi,chill,0.36,76,0.61,0.54,0.85
 31,Soul in Harmony,Gospel Soul,soul,peaceful,0.43,95,0.78,0.59,0.72
 32,Jazz Improvisation,Improv Collective,jazz,focused,0.42,96,0.68,0.50,0.80
+33,Acoustic Joy,Mindful Strings,rock,chill,0.52,95,0.65,0.61,0.78
+34,Desert Dreams,Acoustic Wanderer,rock,relaxed,0.45,88,0.68,0.59,0.80
+35,Pulse Wave,Digital Echo,synthwave,energetic,0.82,135,0.71,0.81,0.12
+36,Morning Brew,Coffee Vibes,lofi,peaceful,0.28,64,0.59,0.48,0.89
+37,Rhythm Dance,Groove Masters,pop,happy,0.88,125,0.86,0.84,0.20
+38,Tender Moment,Soft Touch,indie pop,relaxed,0.35,82,0.72,0.55,0.76
+39,Rising Spirit,Gospel Choir,soul,uplifting,0.71,108,0.85,0.75,0.68
+40,Metallic Dreams,Synth Rock,rock,intense,0.88,145,0.42,0.68,0.15
+41,Cosmic Journey,Ambient Lab,ambient,focused,0.32,65,0.61,0.38,0.88
+42,Dance Night,Club Vibes,electronic,energetic,0.92,140,0.75,0.89,0.05
+43,Warm Breeze,Acoustic Guitar,folk,chill,0.42,80,0.66,0.52,0.85
+44,Melancholic Echo,Deep Mind,blues,melancholic,0.48,92,0.48,0.54,0.81
+45,Summer Groove,Beach Boys,reggae,happy,0.65,98,0.78,0.72,0.68
+46,Whisper Soft,Intimate Jazz,jazz,peaceful,0.33,85,0.69,0.45,0.86
+47,Thunder Road,Rock Legends,rock,intense,0.89,150,0.45,0.69,0.12
+48,Peaceful Garden,Nature Sounds,ambient,peaceful,0.20,55,0.64,0.35,0.94

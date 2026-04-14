@@ -94,12 +94,81 @@ class Recommender:
         self.songs = songs
 
     def recommend(self, user: UserProfile, k: int = 5) -> List[Song]:
-        # TODO: Implement recommendation logic
-        return self.songs[:k]
+        """
+        Recommend top-k songs for a user based on their profile.
+        Scores all songs and returns the highest-scoring ones.
+        """
+        if not self.songs:
+            return []
+        
+        # Convert UserProfile to dictionary for score_song()
+        user_prefs = {
+            'favorite_genre': user.favorite_genre,
+            'favorite_mood': user.favorite_mood,
+            'target_energy': user.target_energy,
+            'target_valence': user.target_valence,
+            'target_acousticness': user.target_acousticness,
+            'acousticness_weight': 1.0,  # Default weight
+        }
+        
+        # Score all songs
+        scored_songs = []
+        for song in self.songs:
+            # Convert Song to dictionary for score_song()
+            song_dict = {
+                'id': song.id,
+                'title': song.title,
+                'artist': song.artist,
+                'genre': song.genre,
+                'mood': song.mood,
+                'energy': song.energy,
+                'tempo_bpm': song.tempo_bpm,
+                'valence': song.valence,
+                'danceability': song.danceability,
+                'acousticness': song.acousticness,
+            }
+            
+            score, reasons = score_song(user_prefs, song_dict)
+            scored_songs.append((song, score, reasons))
+        
+        # Sort by score (descending)
+        scored_songs.sort(key=lambda x: x[1], reverse=True)
+        
+        # Return top-k Song objects
+        return [song for song, score, reasons in scored_songs[:k]]
 
     def explain_recommendation(self, user: UserProfile, song: Song) -> str:
-        # TODO: Implement explanation logic
-        return "Explanation placeholder"
+        """
+        Explain why a song was recommended to a user.
+        Returns a string with the scoring reasons.
+        """
+        # Convert UserProfile to dictionary
+        user_prefs = {
+            'favorite_genre': user.favorite_genre,
+            'favorite_mood': user.favorite_mood,
+            'target_energy': user.target_energy,
+            'target_valence': user.target_valence,
+            'target_acousticness': user.target_acousticness,
+            'acousticness_weight': 1.0,  # Default weight
+        }
+        
+        # Convert Song to dictionary
+        song_dict = {
+            'id': song.id,
+            'title': song.title,
+            'artist': song.artist,
+            'genre': song.genre,
+            'mood': song.mood,
+            'energy': song.energy,
+            'tempo_bpm': song.tempo_bpm,
+            'valence': song.valence,
+            'danceability': song.danceability,
+            'acousticness': song.acousticness,
+        }
+        
+        score, reasons = score_song(user_prefs, song_dict)
+        explanation = " + ".join(reasons)
+        return explanation
 
 def load_songs(csv_path: str) -> List[Dict]:
     """Loads songs from CSV file and returns list of song dictionaries."""
@@ -132,14 +201,15 @@ def load_songs(csv_path: str) -> List[Dict]:
     return songs
 
 def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
-    """Scores a single song and returns (score, reasons) tuple."""
+    """Scores a single song and returns (score, reasons) tuple with detailed breakdown."""
     score = 0.0
     reasons = []
+    scores_breakdown = {}  # Track individual component scores
     
     # LEVEL 1: Categorical matches (strong signals)
-    # Genre match: +1.5 points
+    # Genre match: +1.0 point (reduced from 1.5 to allow numeric features to compete)
     if song['genre'].lower() == user_prefs['favorite_genre'].lower():
-        score += 1.5
+        score += 1.0
         reasons.append("Genre match")
     
     # Mood match: +1.0 point
@@ -148,10 +218,20 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
         reasons.append("Mood match")
     
     # LEVEL 2: Weighted similarity (numeric - gradual)
+    # CHECK FOR CONFLICTING ATTRIBUTES (NEW)
+    # Energy and valence should be somewhat aligned
+    energy_valence_conflict = abs(user_prefs['target_energy'] - (1 - user_prefs['target_valence']))
+    conflict_penalty = 1.0
+    if energy_valence_conflict > 0.6:
+        conflict_penalty = 0.8  # Apply 20% penalty
+        reasons.append("[CONFLICT] Energy and mood contradict")
+    scores_breakdown['conflict_penalty'] = conflict_penalty
+    
     # Energy: Very important for both profiles
     energy_diff = abs(song['energy'] - user_prefs['target_energy'])
-    energy_score = 1.5 * (1.0 - energy_diff)
+    energy_score = 1.5 * (1.0 - energy_diff) * conflict_penalty
     score += energy_score
+    scores_breakdown['energy'] = round(energy_score, 2)
     
     # Energy precision bonus: +0.5 if energy_diff < 0.05 (NEW)
     if energy_diff < 0.05:
@@ -164,12 +244,14 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
     valence_diff = abs(song['valence'] - user_prefs['target_valence'])
     valence_score = 0.75 * (1.0 - valence_diff)
     score += valence_score
+    scores_breakdown['valence'] = round(valence_score, 2)
     
     # Acousticness: Varies by profile (weighted)
     acoustic_diff = abs(song['acousticness'] - user_prefs['target_acousticness'])
     acoustic_weight = user_prefs.get('acousticness_weight', 1.0)
     acoustic_score = acoustic_weight * (1.0 - acoustic_diff)
     score += acoustic_score
+    scores_breakdown['acousticness'] = round(acoustic_score, 2)
     
     # Check acousticness reason
     if acoustic_diff < 0.1:
