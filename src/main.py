@@ -13,7 +13,8 @@ from recommender import (
     load_songs, 
     recommend_songs,
     create_chill_lofi_lover,
-    create_intense_rock_fan
+    create_intense_rock_fan,
+    create_jazz_soul_lover
 )
 
 
@@ -53,6 +54,23 @@ def main() -> None:
     
     print("\nTop 5 recommendations:\n")
     for rec in recommendations_2:
+        song, score, explanation = rec
+        print(f"{song['title']} - Score: {score:.2f}")
+        print(f"Explanation: {explanation}")
+        print()
+
+    # =======================================================================
+    # PROFILE 3: Jazz/Soul Lover
+    # =======================================================================
+    print("\n\n[PROFILE 3] Jazz/Soul Lover")
+    print("-" * 70)
+    user_prefs_3 = create_jazz_soul_lover()
+    print(f"Preferences: {user_prefs_3}")
+    
+    recommendations_3 = recommend_songs(user_prefs_3, songs, k=5)
+    
+    print("\nTop 5 recommendations:\n")
+    for rec in recommendations_3:
         song, score, explanation = rec
         print(f"{song['title']} - Score: {score:.2f}")
         print(f"Explanation: {explanation}")

@@ -19,3 +19,15 @@ id,title,artist,genre,mood,energy,tempo_bpm,valence,danceability,acousticness
 18,Metal Storm,Iron Fists,metal,intense,0.95,160,0.38,0.71,0.05
 19,Soul Rising,Soul Voices,soul,uplifting,0.68,105,0.82,0.77,0.64
 20,K-Pop Dreams,Star Pulse,K-pop,energetic,0.85,128,0.79,0.88,0.12
+21,Jazz Nights,Blue Notes,jazz,relaxed,0.38,92,0.73,0.51,0.84
+22,Soul Smooth,Soul Collective,soul,relaxed,0.46,102,0.80,0.63,0.75
+23,Deep Blues,Bluesman Jack,blues,melancholic,0.50,98,0.52,0.55,0.84
+24,Indie Dreams,Indie Hearts,indie,chill,0.48,108,0.72,0.58,0.68
+25,Lo-Fi Memories,Lost Tapes,lofi,chill,0.38,74,0.63,0.52,0.87
+26,Electric Soul,Soul Fusion,soul,energetic,0.72,118,0.84,0.74,0.42
+27,Jazz Standards,Jazz Room,jazz,relaxed,0.40,88,0.70,0.48,0.82
+28,Acoustic Breeze,Folk Wanderer,folk,peaceful,0.32,68,0.64,0.42,0.91
+29,R&B Nights,R&B Kings,R&B,relaxed,0.52,105,0.77,0.67,0.58
+30,Chill Wave,Lofi Studio,lofi,chill,0.36,76,0.61,0.54,0.85
+31,Soul in Harmony,Gospel Soul,soul,peaceful,0.43,95,0.78,0.59,0.72
+32,Jazz Improvisation,Improv Collective,jazz,focused,0.42,96,0.68,0.50,0.80

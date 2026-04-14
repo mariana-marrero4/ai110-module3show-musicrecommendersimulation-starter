@@ -71,6 +71,20 @@ def create_intense_rock_fan() -> Dict:
         "genre_strictness": 0.6
     }
 
+
+def create_jazz_soul_lover() -> Dict:
+    """Jazz/soul connoisseur who loves smooth, organic sounds with relaxed vibes."""
+    return {
+        "favorite_genre": "jazz",
+        "favorite_mood": "relaxed",
+        "target_energy": 0.45,
+        "target_valence": 0.60,
+        "target_acousticness": 0.80,
+        "acousticness_weight": 1.2,
+        "likes_acoustic": True,
+        "genre_strictness": 0.5
+    }
+
 class Recommender:
     """
     OOP implementation of the recommendation logic.
